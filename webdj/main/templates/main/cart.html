@@ -1,0 +1,56 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<div class="container">
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>{{message}}</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+{% if cart.products.count %}
+<h2 align="center"><b>Кошик</b></h2>
+<hr>	
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Назва</th>
+      <th scope="col">Зображення</th>
+      <th scope="col">Ціна за шт.</th>
+      <th scope="col">Кількість</th>
+      <th scope="col">Загальна ціна</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+
+  	{% for item in cart.products.all %}  
+    <tr>
+      <th scope="row">{{item.content_object.title}}</th>
+      <td class="w-10"><img class="img-fluid" src="{{item.content_object.image.url}}"></td>
+      <td>{{item.content_object.price}} грн.</td>
+      <td>
+        <form action="{% url 'quantity_of_products' ct_model=item.content_object.get_model_name slug=item.content_object.slug %}" method="POST">
+          {%csrf_token%}
+          <input  min="1" type="numder" value="{{item.number}}" name="quantity">
+          <input type="submit" class="btn btn-primary" value="Змінити к-ть">
+        </form>
+      </td> 
+      <td>{{item.general_price}} грн.</td>
+      <td><a class="btn btn-outline-dark mt-auto" href="{% url 'remove_from_cart' ct_model=item.content_object.get_model_name slug=item.content_object.slug %}">Видалити товар</a></td>
+    </tr>
+    {% endfor %}
+    <tr>
+      <td colspan="2"></td>
+      <td>Підсумок:</td>
+      <td>{{cart.general_price}} грн.</td>
+      <td><a href="{% url 'checkout' %}"><button class="btn btn-primary">Оформити замовлення</button></a></td>
+    </tr>
+  </tbody>
+</table>
+{% endif %}
+</div>
+{% endblock content %}

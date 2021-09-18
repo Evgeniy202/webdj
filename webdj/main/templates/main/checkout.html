@@ -1,0 +1,43 @@
+{% extends "main/base.html" %}
+{% load crispy_forms_tags %}
+
+{%block content%}
+<div class="container">
+	<h2 align="center"><b>Оформлення замовлення</b></h2>
+	<table class="table table-striped table-hover">
+	  <thead>
+	    <tr>
+	      <th scope="col">Назва</th>
+	      <th scope="col">Зображення</th>
+	      <th scope="col">Ціна за шт.</th>
+	      <th scope="col">Кількість</th>
+	      <th scope="col">Загальна ціна</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+
+	  	{% for item in cart.products.all %}  
+	    <tr>
+	      <th scope="row">{{item.content_object.title}}</th>
+	      <td class="w-10"><img class="img-fluid" src="{{item.content_object.image.url}}"></td>
+	      <td>{{item.content_object.price}} грн.</td>
+	      <td>{{item.number}}</td>
+	      <td>{{item.general_price}} грн.</td>
+	    </tr>
+	    {% endfor %}
+	    <tr>
+	      <td colspan="2"></td>
+ 	      <td>Підсумок:</td>
+	      <td>{{cart.general_price}} грн.</td>
+	    </tr>
+	  </tbody>
+	</table>
+	<hr>
+	<h4 align="center">Форма замовлення</h4>
+	<form action="{% url 'make_order' %}" method="POST">
+		{% csrf_token %}
+		{{form|crispy}}
+		<input type="submit" class="btn btn-success btn-block mb-3" value="Оформити замовлення">
+	</form>
+</div>
+{%endblock content%}
