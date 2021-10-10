@@ -20,32 +20,6 @@
 			<a class="btn btn-outline-dark mt-auto" href="{% url 'add_to_cart' ct_model=ct_model slug=product.slug %}">Додати до кошика</a>
 			<hr>
 			<p><b>Опис</b>: {{ product.description }}</p>
-			<p class = "mt-4"><b>Характеристики</b>:</p>
-			{%if product.category.slug == 'hooks'%}
-	        	{%include 'main/products/hooks_specification.html'%}
-			{%elif product.category.slug == 'rods'%}
-				{%include 'main/products/rods_specification.html'%}
-			{%elif product.category.slug == 'coils'%}
-				{%include 'main/products/coils_specification.html'%}
-			{%elif product.category.slug == 'cargo'%}
-				{%include 'main/products/cargo_specification.html'%}
-			{%elif product.category.slug == 'wobblers'%}
-				{%include 'main/products/wobblers_specification.html'%}
-			{%elif product.category.slug == 'soft_baits'%}
-				{%include 'main/products/soft_baits_specification.html'%}
-			{%elif product.category.slug == 'spinners'%}
-				{%include 'main/products/spinners_specification.html'%}
-			{%elif product.category.slug == 'cords_and_lines'%}
-				{%include 'main/products/cords_and_lines_specification.html'%}
-			{%elif product.category.slug == 'groundbaits_ozzeles'%}
-				{%include 'main/products/groundbaits_ozzles_specification.html'%}
-			{%elif product.category.slug == 'feeders'%}
-				{%include 'main/products/feeders_specification.html'%}
-			{%elif product.category.slug == 'leashes'%}
-				{%include 'main/products/leashes_specification.html'%}
-			{%elif product.category.slug == 'fishing_accessories'%}
-				{%include 'main/products/fishing_accessories_specification.html'%}
-			{%endif%}
 		</div>
 	</div>
 </div>

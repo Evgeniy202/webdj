@@ -4,19 +4,16 @@ from django.http import HttpResponseRedirect
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.db import transaction
-from .models import Hooks, Rods, Coils, Cargo, Wobblers, Soft_baits, Spinners, Corbs_and_lines, Groundbaits_ozzles, Feeders, Leashes, Fishing_accessories, Category, LatestProducts, Customer, Cart, CartProduct
-from .mixins import CategoryInfMixin, CartMixin
+from .models import Category, Product, Customer, Cart, CartProduct
+from .mixins import CartMixin
 from .forms import OrderForm
 from .utils import recalc_cart
 
 
 class Main(CartMixin, View):
     def get(self, request, *args, **kwargs):
-        categories = Category.objects.get_categories_for_dropdown()
-        products = LatestProducts.objects.get_products_for_main_page(
-                'hooks', 'rods', 'coils', 'cargo', 'wobblers', 'soft_baits', 'spinners', 
-                'corbs_and_lines', 'groundbaits_ozzles', 'feeders', 'leashes', 'fishing_accessories'
-            )
+        categories = Category.objects.all()
+        products = Product.objects.all()
         context = {
             'categories': categories,
             'products': products,
@@ -25,42 +22,18 @@ class Main(CartMixin, View):
         return render(request, 'main/index.html', context)
 
 
-class ProductDetailView(CartMixin, CategoryInfMixin, DetailView):
+class ProductDetailView(CartMixin, DetailView):
 
-    CT_MODEL_MODEL_CLASS = {
-        'hooks': Hooks,
-        'rods': Rods,
-        'coils': Coils,
-        'cargo': Cargo,
-        'wobblers': Wobblers,
-        'soft_baits': Soft_baits,
-        'spinners': Spinners,
-        'corbs_and_lines': Corbs_and_lines,
-        'groundbaits_ozzles': Groundbaits_ozzles,
-        'feeders': Feeders,
-        'leashes': Leashes,
-        'fishing_accessories': Fishing_accessories
-    }
-
-    def dispatch(self, request, *args, **kwargs):
-        self.model = self.CT_MODEL_MODEL_CLASS[kwargs['ct_model']]
-        self.queryset = self.model._base_manager.all()
-        return super().dispatch(request, *args, **kwargs)
-
-
-    #model = Model
-    #queryset = Model.objects.all()
     context_object_name = 'product'
     template_name = 'main/product_inf.html'
     slug_url_kwarg = 'slug'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['ct_model'] = self.model._meta.model_name
         context['cart'] = self.cart
         return context 
 
-class CategoryDetailView(CartMixin, CategoryInfMixin, DetailView):
+class CategoryDetailView(CartMixin, DetailView):
     model = Category
     queryset = Category.objects.all()
     context_object_name = 'category'
@@ -74,10 +47,9 @@ class CategoryDetailView(CartMixin, CategoryInfMixin, DetailView):
     
 class AddToCartView(CartMixin, View):
     def get(self, request, *args, **kwargs):
-        ct_model, product_slug = kwargs.get('ct_model'), kwargs.get('slug')
-        content_type = ContentType.objects.get(model = ct_model)
-        product = content_type.model_class().objects.get(slug = product_slug)
-        cart_product, created = CartProduct.objects.get_or_create(user = self.cart.owner, cart = self.cart, content_type = content_type, object_id = product.id)
+        product_slug = kwargs.get('slug')
+        product = Product.model_class().objects.get(slug = product_slug)
+        cart_product, created = CartProduct.objects.get_or_create(user = self.cart.owner, cart = self.cart, product = product)
         if created:
             self.cart.products.add(cart_product)
         recalc_cart(self.cart)
@@ -86,16 +58,15 @@ class AddToCartView(CartMixin, View):
 
 class CartView(CartMixin, View):
     def get(self, request, *args, **kwargs):
-        categories = Category.objects.get_categories_for_dropdown()
+        categories = Category.objects.all()
         context = {'cart': self.cart, 'categories': categories}
         return render(request, 'main/cart.html', context)
 
 class DeleteFromCartView(CartMixin, View):
     def get(self,request, *args, **kwargs):
-        ct_model, product_slug = kwargs.get('ct_model'), kwargs.get('slug')
-        content_type = ContentType.objects.get(model = ct_model)
-        product = content_type.model_class().objects.get(slug = product_slug)
-        cart_product = CartProduct.objects.get(user = self.cart.owner, cart = self.cart, content_type = content_type, object_id = product.id)
+        product_slug = kwargs.get('slug')
+        product = Product.objects.get(slug = product_slug)
+        cart_product = CartProduct.objects.get(user = self.cart.owner, cart = self.cart, product = product)
         self.cart.products.remove(cart_product)
         cart_product.delete()
         recalc_cart(self.cart)
@@ -104,10 +75,9 @@ class DeleteFromCartView(CartMixin, View):
 
 class QuantityOfProductsView(CartMixin, View):
     def post(self, request, *args, **kwargs):
-        ct_model, product_slug = kwargs.get('ct_model'), kwargs.get('slug')
-        content_type = ContentType.objects.get(model = ct_model)
-        product = content_type.model_class().objects.get(slug = product_slug)
-        cart_product = CartProduct.objects.get(user = self.cart.owner, cart = self.cart, content_type = content_type, object_id = product.id)
+        product_slug = kwargs.get('slug')
+        product = Product.objects.get(slug = product_slug)
+        cart_product = CartProduct.objects.get(user = self.cart.owner, cart = self.cart, product = product)
         quantity = int(request.POST.get('quantity'))
         cart_product.number = quantity
         cart_product.save()
@@ -117,7 +87,7 @@ class QuantityOfProductsView(CartMixin, View):
 
 class CheckoutView(CartMixin, View):
     def get(self, request, *args, **kwargs):
-        categories = Category.objects.get_categories_for_dropdown()
+        categories = Category.objects.all()
         form = OrderForm(request.POST or None)
         context = {'cart': self.cart, 'categories': categories, 'form': form}
         return render(request, 'main/checkout.html', context)
