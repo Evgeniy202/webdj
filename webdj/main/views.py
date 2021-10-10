@@ -31,7 +31,7 @@ class ProductDetailView(CartMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['cart'] = self.cart
-        return context 
+        return context
 
 class CategoryDetailView(CartMixin, DetailView):
     model = Category
@@ -43,12 +43,12 @@ class CategoryDetailView(CartMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['cart'] = self.cart
-        return context 
-    
+        return context
+
 class AddToCartView(CartMixin, View):
     def get(self, request, *args, **kwargs):
         product_slug = kwargs.get('slug')
-        product = Product.model_class().objects.get(slug = product_slug)
+        product = Product.objects.get(slug = product_slug)
         cart_product, created = CartProduct.objects.get_or_create(user = self.cart.owner, cart = self.cart, product = product)
         if created:
             self.cart.products.add(cart_product)

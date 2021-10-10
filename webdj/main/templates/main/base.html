@@ -47,7 +47,7 @@
                 </div>
             </div>
         </nav>
-       
+
         <!-- Section-->
 
         {% block content %}
@@ -73,7 +73,7 @@
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 
                     {% for product in products %}
-    
+
                     <div class="col mb-5">
                         <div class="card h-100">
                             <!-- Product image-->
@@ -83,13 +83,13 @@
                             <!-- Product details-->
                             <div class="card-body p-4 row align-items-end">
                                 <div class="text-center">
-                                    <!-- Product name-->   
+                                    <!-- Product name-->
                                     <a href="{{product.get_absolute_url}}">
                                        <h5 class="fw-bolder">{{product.title}}</h5>
                                     </a>
                                     <!-- Product price-->
                                     {{product.price}} грн
-                                    <a class="btn btn-outline-dark mt-auto" href="{% url 'add_to_cart' ct_model=product.get_model_name slug=product.slug %}">Додати до кошика</a>
+                                    <a class="btn btn-outline-dark mt-auto" href="{% url 'add_to_cart' slug=product.slug %}">Додати до кошика</a>
                                 </div>
                             </div>
                         </div>

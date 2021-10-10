@@ -62,7 +62,7 @@ class CartProduct(models.Model):
     general_price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name = 'Загальна ціна')
 
     def __str__(self):
-        return "Продукт: {}".format(self.content_object.title) 
+        return "Продукт: {}".format(self.product.title) 
 
     def save(self, *args, **kwargs):
         self.general_price = self.number * self.product.price

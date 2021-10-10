@@ -13,7 +13,7 @@
 
 {% if cart.products.count %}
 <h2 align="center"><b>Кошик</b></h2>
-<hr>	
+<hr>
 <table class="table table-striped table-hover">
   <thead>
     <tr>
@@ -27,20 +27,20 @@
   </thead>
   <tbody>
 
-  	{% for item in cart.products.all %}  
+  	{% for item in cart.products.all %}
     <tr>
       <th scope="row">{{item.content_object.title}}</th>
-      <td class="w-10"><img class="img-fluid" src="{{item.content_object.image.url}}"></td>
+      <td class="w-10"><img class="img-fluid" src="{{item.product.image.url}}"></td>
       <td>{{item.content_object.price}} грн.</td>
       <td>
-        <form action="{% url 'quantity_of_products' ct_model=item.content_object.get_model_name slug=item.content_object.slug %}" method="POST">
+        <form action="{% url 'quantity_of_products' slug=item.product.slug %}" method="POST">
           {%csrf_token%}
           <input  min="1" type="numder" value="{{item.number}}" name="quantity">
           <input type="submit" class="btn btn-primary" value="Змінити к-ть">
         </form>
-      </td> 
+      </td>
       <td>{{item.general_price}} грн.</td>
-      <td><a class="btn btn-outline-dark mt-auto" href="{% url 'remove_from_cart' ct_model=item.content_object.get_model_name slug=item.content_object.slug %}">Видалити товар</a></td>
+      <td><a class="btn btn-outline-dark mt-auto" href="{% url 'remove_from_cart' slug=item.product.slug %}">Видалити товар</a></td>
     </tr>
     {% endfor %}
     <tr>
