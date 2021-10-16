@@ -4,9 +4,10 @@ from django.http import HttpResponseRedirect
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.db import transaction
+from django.contrib.auth import authenticate, login
 from .models import Category, Product, Customer, Cart, CartProduct
 from .mixins import CartMixin
-from .forms import OrderForm
+from .forms import OrderForm, LoginForm
 from .utils import recalc_cart
 
 
@@ -116,3 +117,22 @@ class MakeOrderView(CartMixin, View):
             messages.add_message(request, messages.INFO, 'Замовлення успішно прийняте! Через деякий час вам зателефонують для підтвердження замовлення.')
             return HttpResponseRedirect('/')
         return HttpResponseRedirect('/checkout/')
+
+class LoginView(CartMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        form = LoginForm(request.POST or None)
+        categories = Category.objects.all()
+        context = {'form': form, 'categories': categories, 'cart': self.cart}
+        return render(request, 'main/login.html', context)
+
+    def post(self, request, *args, **kwargs):
+        form = LoginForm(request.POST or None)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username = username, password = password)
+            if user:
+                login(request, user)
+                return HttpResponseRedirect('/')
+        return render(request, 'main/login.html', {'form': form, 'cart': self.cart})

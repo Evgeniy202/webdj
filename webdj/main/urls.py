@@ -1,4 +1,4 @@
-from .views import Main, ProductDetailView, CategoryDetailView, CartView, AddToCartView, DeleteFromCartView, QuantityOfProductsView, CheckoutView, MakeOrderView
+from .views import Main, ProductDetailView, CategoryDetailView, CartView, AddToCartView, DeleteFromCartView, QuantityOfProductsView, CheckoutView, MakeOrderView, LoginView
 from django.urls import path, include
 
 urlpatterns = [
@@ -10,5 +10,6 @@ urlpatterns = [
     path('remove_from_cart/<str:slug>/', DeleteFromCartView.as_view(), name = 'remove_from_cart'),
     path('quantity_of_products/<str:slug>/', QuantityOfProductsView.as_view(), name = 'quantity_of_products'),
     path('checkout/', CheckoutView.as_view(), name = 'checkout'),
-    path('make_order/', MakeOrderView.as_view(), name = 'make_order')
+    path('make_order/', MakeOrderView.as_view(), name = 'make_order'),
+    path('login/', LoginView.as_view(), name = 'login')
 ]

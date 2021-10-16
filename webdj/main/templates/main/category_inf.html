@@ -29,7 +29,7 @@
 		                    </a>
 		                    <!-- Product price-->
 		                    {{product.price}} грн
-		                    <a class="btn btn-outline-dark mt-auto" href="{% url 'add_to_cart' ct_model=product.get_model_name slug=product.slug %}">Додати до кошика</a>
+		                    <a class="btn btn-outline-dark mt-auto" href="{% url 'add_to_cart'  slug=product.slug %}">Додати до кошика</a>
 		                </div>
 		            </div>
 		        </div>
