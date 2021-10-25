@@ -5,9 +5,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.db import transaction
 from django.contrib.auth import authenticate, login
+
+from main.forms import SignupForm
 from .models import Category, Product, Customer, Cart, CartProduct
 from .mixins import CartMixin
-from .forms import OrderForm, LoginForm
+from .forms import OrderForm, LoginForm, SignupForm
 from .utils import recalc_cart
 
 
@@ -135,4 +137,31 @@ class LoginView(CartMixin, View):
             if user:
                 login(request, user)
                 return HttpResponseRedirect('/')
-        return render(request, 'main/login.html', {'form': form, 'cart': self.cart})
+        context = {'form': form, 'cart': self.cart}
+        return render(request, 'main/login.html', context)
+
+class SignupView(CartMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        form = SignupForm(request.POST or None)
+        categories = Category.objects.all()
+        context = {'form': form, 'categories': categories, 'cart': self.cart}
+        return render(request, 'main/signup.html', context)
+
+    def post(self, request, *args, **kwargs):
+        form = SignupForm(request.POST or None)
+        if form.is_valid():
+            new = form.save(commit=False)
+            new.username = form.cleaned_data['username']
+            new.email = form.cleaned_data['email']
+            new.first_name = form.cleaned_data['first_name']
+            new.last_name = form.cleaned_data['last_name']
+            new.save()
+            new.set_password(form.cleaned_data['password'])
+            new.save()
+            Customer.objects.create(user=new, phone=form.cleaned_data['phone'], address=form.cleaned_data['address'])
+            user = authenticate(username=form.cleaned_data['username'], password = form.cleaned_data['password'])
+            login(request, user)
+            return HttpPesponseRedirect('/')
+        context = {'form': form, 'cart': self.cart}
+        return render(request, 'main/signup.html', context)   
