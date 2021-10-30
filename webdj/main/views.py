@@ -151,17 +151,17 @@ class SignupView(CartMixin, View):
     def post(self, request, *args, **kwargs):
         form = SignupForm(request.POST or None)
         if form.is_valid():
-            new = form.save(commit=False)
-            new.username = form.cleaned_data['username']
-            new.email = form.cleaned_data['email']
-            new.first_name = form.cleaned_data['first_name']
-            new.last_name = form.cleaned_data['last_name']
-            new.save()
-            new.set_password(form.cleaned_data['password'])
-            new.save()
-            Customer.objects.create(user=new, phone=form.cleaned_data['phone'], address=form.cleaned_data['address'])
+            newuser = form.save(commit=False)
+            newuser.username = form.cleaned_data['username']
+            newuser.email = form.cleaned_data['email']
+            newuser.first_name = form.cleaned_data['first_name']
+            newuser.last_name = form.cleaned_data['last_name']
+            newuser.save()
+            newuser.set_password(form.cleaned_data['password'])
+            newuser.save()
+            Customer.objects.create(user=newuser, phone=form.cleaned_data['phone'], address=form.cleaned_data['address'])
             user = authenticate(username=form.cleaned_data['username'], password = form.cleaned_data['password'])
             login(request, user)
-            return HttpPesponseRedirect('/')
+            return HttpResponseRedirect('/')
         context = {'form': form, 'cart': self.cart}
         return render(request, 'main/signup.html', context)   

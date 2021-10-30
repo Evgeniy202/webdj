@@ -52,12 +52,15 @@
                                 <a class="nav-link" href="{% url 'login' %}">Авторизація</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Реєстрація</a>
+                                <a class="nav-link" href="{% url 'signup' %}">Реєстрація</a>
                             </li>
                         {% endif %}
                         {% if request.user.is_authenticated %}
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Особистий кабінет</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'logout' %}">Вихід</a>
                             </li>
                         {% endif %}
                     </ul>
