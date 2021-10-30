@@ -43,9 +43,9 @@ class LoginForm(forms.ModelForm):
 
 class SignupForm(forms.ModelForm):
 
-	passwordconf = forms.CharField(widget=forms.PasswordInput)
 	email = forms.EmailField(required=True)
 	password = forms.CharField(widget=forms.PasswordInput)
+	passwordconf = forms.CharField(widget=forms.PasswordInput)
 	phone = forms.CharField(required=False)
 	address = forms.CharField(required=False)
 
@@ -62,17 +62,17 @@ class SignupForm(forms.ModelForm):
 
 	def clean_email(self):
 		email = self.cleaned_data['email']
-		if User.objects.filter(email=email).exists:
+		if User.objects.filter(email=email).exists():
 			raise forms.ValidationError(f'Даний електронний адрес вже зареєстрованно в ситемі!')
 		return email
 
 	def clean_username(self):
 		username = self.cleaned_data['username']
-		if User.objects.filter(username=username).exists:
-			raise forms.ValidationError(f'Логін {username} вже зайнятий! Спробуйте ввести інший логін.')
+		if User.objects.filter(username=username).exists():
+			raise forms.ValidationError(f'Логін "{username}" вже зайнятий! Спробуйте ввести інший логін.')
 		return username
 
-	def clean_password(self):
+	def clean(self):
 		password = self.cleaned_data['password']
 		passwordconf = self.cleaned_data['passwordconf']
 		if password != passwordconf:
@@ -80,5 +80,5 @@ class SignupForm(forms.ModelForm):
 		return self.cleaned_data
 
 	class Meta:
-		madel = User
+		model = User
 		fields = ['username', 'email', 'password', 'passwordconf', 'first_name', 'last_name', 'phone', 'address']	

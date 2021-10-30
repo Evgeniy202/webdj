@@ -1,5 +1,6 @@
-from .views import Main, ProductDetailView, CategoryDetailView, CartView, AddToCartView, DeleteFromCartView, QuantityOfProductsView, CheckoutView, MakeOrderView, LoginView
+from .views import Main, ProductDetailView, CategoryDetailView, CartView, AddToCartView, DeleteFromCartView, QuantityOfProductsView, CheckoutView, MakeOrderView, LoginView, SignupView
 from django.urls import path, include
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path('', Main.as_view(), name='main'),
@@ -11,5 +12,7 @@ urlpatterns = [
     path('quantity_of_products/<str:slug>/', QuantityOfProductsView.as_view(), name = 'quantity_of_products'),
     path('checkout/', CheckoutView.as_view(), name = 'checkout'),
     path('make_order/', MakeOrderView.as_view(), name = 'make_order'),
-    path('login/', LoginView.as_view(), name = 'login')
+    path('login/', LoginView.as_view(), name = 'login'),
+    path('logout/', LogoutView.as_view(next_page='/'), name = 'logout'),
+    path('signup/', SignupView.as_view(), name = 'signup')
 ]
