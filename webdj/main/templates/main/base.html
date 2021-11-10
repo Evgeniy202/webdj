@@ -57,7 +57,7 @@
                         {% endif %}
                         {% if request.user.is_authenticated %}
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Особистий кабінет</a>
+                                <a class="nav-link" href="{% url 'profile' %}">Особистий кабінет</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'logout' %}">Вихід</a>
