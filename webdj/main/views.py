@@ -7,7 +7,7 @@ from django.db import transaction
 from django.contrib.auth import authenticate, login
 
 from main.forms import SignupForm
-from .models import Category, Product, Customer, Cart, CartProduct
+from .models import Category, Product, Customer, Cart, CartProduct, Order
 from .mixins import CartMixin
 from .forms import OrderForm, LoginForm, SignupForm
 from .utils import recalc_cart
@@ -121,7 +121,6 @@ class MakeOrderView(CartMixin, View):
         return HttpResponseRedirect('/checkout/')
 
 class LoginView(CartMixin, View):
-
     def get(self, request, *args, **kwargs):
         form = LoginForm(request.POST or None)
         categories = Category.objects.all()
@@ -141,7 +140,6 @@ class LoginView(CartMixin, View):
         return render(request, 'main/login.html', context)
 
 class SignupView(CartMixin, View):
-
     def get(self, request, *args, **kwargs):
         form = SignupForm(request.POST or None)
         categories = Category.objects.all()
@@ -165,3 +163,11 @@ class SignupView(CartMixin, View):
             return HttpResponseRedirect('/')
         context = {'form': form, 'cart': self.cart}
         return render(request, 'main/signup.html', context)   
+
+class ProfileView(CartMixin, View):
+    def get(self, request, *args, **kwargs):
+        customer = Customer.objects.get(username=username)
+        orders = Order.objects.filter(customer=customer).order_by('-created_at')
+        categories = Category.objects.all()
+        contean = {'orders': orders, 'cart': self.cart, 'categories': categories}
+        return render(request, 'main/profile.html', contean)
