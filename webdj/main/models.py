@@ -23,6 +23,9 @@ class Category(models.Model):
     def get_absolute_url(self):
         return reverse('category_inf', kwargs = {'slug': self.slug})
 
+    def get_fields_for_filter_in_templates(self):
+        return ProductFeatures.objects.filter(category=self, use_in_filter=True).prefetch_related('category').value('feature_kod', 'filter_measure', 'feature_name', 'filter_type')
+
 class Product(models.Model):
 
     category = models.ForeignKey(Category, on_delete = models.CASCADE, verbose_name = 'Категорія')
@@ -126,3 +129,32 @@ class Order(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+class ProductFeatures(models.Model):
+
+    # RADIOBTN = "radio"
+    CHECKBOX = "checkbox"
+
+    # FILTER_TYPE_CHOICES = ((RADIOBTN, 'Радіокнопка'), (CHECKBOX, 'Прапорець'))
+
+    feature_kod = models.CharField(max_length=250, verbose_name='Код характеристик')
+    feature_name = models.CharField(max_length=250, verbose_name='Назва характеристик')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категорія')
+    postfix = models.CharField(max_length=50, null=True, blank=True, verbose_name='Постфікс')
+    filter_use = models.BooleanField(default=False, verbose_name='Використовувати для фільтра')
+    # filter_type = models.CharField(max_length=50, default=CHECKBOX, choices=FILTER_TYPE_CHOICES)
+    filter_type = models.CharField(max_length=50, default=CHECKBOX, choices=CHECKBOX)
+    filter_measure  = models.CharField(max_length=50, verbose_name='Одиниця виміру')
+
+    def __str__(self):
+        return f'Категорія - "{self.category.name}" | Характеристика - "{self.feature_name}"'
+
+class ProductFeaturesValidators(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категорія')
+    feature = models.ForeignKey(ProductFeatures, on_delete=models.CASCADE, verbose_name='Характеристика', null=True, blank=True)
+    feature_value = models.CharField(max_length=250, verbose_name='Значення характеристики', unique=True, null=True, blank=True)
+
+    def __str__(self):
+        if not self.feature:
+            return f'Характеристика не обрана!'
+        return f'Валідація прошла успішно!'
