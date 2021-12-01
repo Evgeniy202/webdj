@@ -143,7 +143,7 @@ class ProductFeatures(models.Model):
     postfix = models.CharField(max_length=50, null=True, blank=True, verbose_name='Постфікс')
     filter_use = models.BooleanField(default=False, verbose_name='Використовувати для фільтра')
     # filter_type = models.CharField(max_length=50, default=CHECKBOX, choices=FILTER_TYPE_CHOICES)
-    filter_type = models.CharField(max_length=50, default=CHECKBOX, choices=CHECKBOX)
+    filter_type = models.CharField(max_length=50, default=CHECKBOX,)
     filter_measure  = models.CharField(max_length=50, verbose_name='Одиниця виміру')
 
     def __str__(self):
