@@ -1,16 +1,21 @@
 from django.shortcuts import render
 from django.views.generic import DetailView, View
 from django.http import HttpResponseRedirect
-from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.db import transaction
 from django.contrib.auth import authenticate, login
+from django.db.models import Q
 
 from main.forms import SignupForm
-from .models import Category, Product, Customer, Cart, CartProduct, Order
+from .models import Category, Product, Customer, Cart, CartProduct, Order, User
 from .mixins import CartMixin
 from .forms import OrderForm, LoginForm, SignupForm
 from .utils import recalc_cart
+from characteristics.models import ProductFeatures
+
+
+class MyQ(Q):
+    default = 'OR'
 
 
 class Main(CartMixin, View):
@@ -33,6 +38,7 @@ class ProductDetailView(CartMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['categories'] = self.get_object().category.__class__.objects.all()
         context['cart'] = self.cart
         return context
 
@@ -45,8 +51,36 @@ class CategoryDetailView(CartMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        query = self.request.GET.get('search')
+        category = self.get_object()
         context['cart'] = self.cart
+        context['categories'] = self.model.objects.all()
+        if not query and not self.request.GET:
+            context['category_products'] = category.product_set.all()
+            return context
+        if query:
+            products = category.product_set.filter(Q(title__icontains=query))
+            context['category_products'] = products
+            return context
+        url_kwargs = {}
+        for item in self.request.GET:
+            if len(self.request.GET.getlist(item)) > 1:
+                url_kwargs[item] = self.request.GET.getlist(item)
+            else:
+                url_kwargs[item] = self.request.GET.get(item)
+        q_condition_queries = Q()
+        for key, value in url_kwargs.items():
+            if isinstance(value, list):
+                q_condition_queries.add(Q(**{'value__in': value}), Q.OR)
+            else:
+                q_condition_queries.add(Q(**{'value': value}), Q.OR)
+        pf = ProductFeatures.objects.filter(
+            q_condition_queries
+        ).prefetch_related('product', 'feature').values('product_id')
+        products = Product.objects.filter(id__in=[pf_['product_id'] for pf_ in pf])
+        context['category_products'] = products
         return context
+
 
 class AddToCartView(CartMixin, View):
     def get(self, request, *args, **kwargs):
@@ -136,7 +170,7 @@ class LoginView(CartMixin, View):
             if user:
                 login(request, user)
                 return HttpResponseRedirect('/')
-        context = {'form': form, 'cart': self.cart}
+        context = {'form': form, 'cart': self.cart, 'categories': categories}
         return render(request, 'main/login.html', context)
 
 class SignupView(CartMixin, View):
@@ -161,11 +195,13 @@ class SignupView(CartMixin, View):
             user = authenticate(username=form.cleaned_data['username'], password = form.cleaned_data['password'])
             login(request, user)
             return HttpResponseRedirect('/')
-        context = {'form': form, 'cart': self.cart}
+        categories = Category.objects.all()
+        context = {'form': form, 'categories': categories, 'cart': self.cart}
         return render(request, 'main/signup.html', context)   
 
 class ProfileView(CartMixin, View):
     def get(self, request, *args, **kwargs):
+        username = request.user.username
         customer = Customer.objects.get(username=username)
         orders = Order.objects.filter(customer=customer).order_by('-created_at')
         categories = Category.objects.all()
