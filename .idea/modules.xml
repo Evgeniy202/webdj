@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/webdj.iml" filepath="$PROJECT_DIR$/.idea/webdj.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/dp.iml" filepath="$PROJECT_DIR$/.idea/dp.iml" />
     </modules>
   </component>
 </project>
