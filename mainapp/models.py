@@ -28,6 +28,14 @@ class Product(models.Model):
     description = models.TextField(verbose_name='Опис', null=True)
     price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name='Ціна')
     features = models.ManyToManyField("specs.ProductFeatures", blank=True, related_name='features_for_product')
+    img1 = models.ImageField(verbose_name="Додаткове зображення (не обов'язково)", null=True, blank=True)
+    img2 = models.ImageField(verbose_name="Додаткове зображення (не обов'язково)", null=True, blank=True)
+    img3 = models.ImageField(verbose_name="Додаткове зображення (не обов'язково)", null=True, blank=True)
+    img4 = models.ImageField(verbose_name="Додаткове зображення (не обов'язково)", null=True, blank=True)
+    img5 = models.ImageField(verbose_name="Додаткове зображення (не обов'язково)", null=True, blank=True)
+    img6 = models.ImageField(verbose_name="Додаткове зображення (не обов'язково)", null=True, blank=True)
+    img7 = models.ImageField(verbose_name="Додаткове зображення (не обов'язково)", null=True, blank=True)
+    img8 = models.ImageField(verbose_name="Додаткове зображення (не обов'язково)", null=True, blank=True)
 
     def __str__(self):
         return self.title

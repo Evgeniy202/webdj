@@ -24,7 +24,12 @@ class MyQ(Q):
 class AboutView(CartMixin, View):
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'about.html')
+        categories = Category.objects.all()
+        context = {
+            'categories': categories,
+            'cart': self.cart
+        }
+        return render(request, 'about.html', context)
 
 class BaseView(CartMixin, View):
 
@@ -265,8 +270,10 @@ class RegistrationView(CartMixin, View):
 class ProfileView(CartMixin, View):
     def get(self, request, *args, **kwargs):
         customer = Customer.objects.get(user=request.user)
+        categories = Category.objects.all()
         context = {
             'customer': customer,
+            'categories': categories,
             'cart': self.cart,
         }
         return render(request, 'profile.html', context)
