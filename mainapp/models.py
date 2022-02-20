@@ -69,7 +69,6 @@ class Cart(models.Model):
 class Customer(models.Model):
     user = models.ForeignKey(User, verbose_name='Покупець', on_delete=models.CASCADE)
     phone = models.CharField(max_length=20, verbose_name='Номер телефона', null=True, blank=True)
-    address = models.CharField(max_length=255, verbose_name='Адреса', null=True, blank=True)
     orders = models.ManyToManyField('Order', verbose_name='Замовлення покупця', related_name='related_order')
 
     def __str__(self):
@@ -81,6 +80,7 @@ class Order(models.Model):
     STATUS_IN_PROGRESS = 'in_progress'
     STATUS_READY = 'is_ready'
     STATUS_COMPLETED = 'completed'
+    STATUS_CANCELED = 'canceled'
 
     BUYING_TYPE_SELF = 'self'
     BUYING_TYPE_DELIVERY = 'delivery'
@@ -89,7 +89,8 @@ class Order(models.Model):
         (STATUS_NEW, 'Нове замовлення'),
         (STATUS_IN_PROGRESS, 'Замовлення в оброці'),
         (STATUS_READY, 'Замовлення готове'),
-        (STATUS_COMPLETED, 'Замовленння виконане')
+        (STATUS_COMPLETED, 'Замовленння виконане'),
+        (STATUS_CANCELED, 'Замовлення скасовано')
     )
 
     BUYING_TYPE_CHOICES = (

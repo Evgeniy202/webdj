@@ -10,7 +10,7 @@ class OrderForm(forms.ModelForm):
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args, **kwargs)
     #     self.fields['order_date'].label = 'Дата отримання замовлення'
-
+    #
     # order_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
 
     class Meta:
@@ -50,7 +50,6 @@ class RegistrationForm(forms.ModelForm):
     confirm_password = forms.CharField(widget=forms.PasswordInput)
     password = forms.CharField(widget=forms.PasswordInput)
     phone = forms.CharField(required=False)
-    address = forms.CharField(required=False)
     email = forms.EmailField(required=True)
 
     def __init__(self, *args, **kwargs):
@@ -59,9 +58,6 @@ class RegistrationForm(forms.ModelForm):
         self.fields['password'].label = 'Пароль'
         self.fields['confirm_password'].label = 'Повторіть пароль'
         self.fields['phone'].label = 'Номер телефону'
-        self.fields['first_name'].label = "Ім'я"
-        self.fields['last_name'].label = 'Прізвище'
-        self.fields['address'].label = 'Адреса'
         self.fields['email'].label = 'Електронна пошта'
 
     def clean_email(self):
@@ -89,4 +85,4 @@ class RegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'password', 'confirm_password', 'first_name', 'last_name', 'address', 'phone', 'email']
+        fields = ['username', 'password', 'confirm_password', 'phone', 'email']
