@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
+<div class="container text-light">
     <nav aria-label="breadcrumb" class="mt-5">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'index' %}">Головна</a></li>
@@ -19,7 +19,7 @@
             <table class="table">
                 <tbody>
                     {% for f_name, f_value in product.get_features.items %}
-                    <tr>
+                    <tr class="text-light">
                         <th scope="row">{{ f_name }}</th>
                         <td>{{ f_value }}</td>
                     </tr>

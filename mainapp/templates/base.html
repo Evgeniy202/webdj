@@ -95,7 +95,7 @@
     </header>
     {% if messages %}
     {% for message in messages %}
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <div id="message" class="alert alert-success alert-dismissible fade show" role="alert">
         <strong>{{message}}</strong>
         <script>
             setTimeout(function () {
@@ -141,7 +141,7 @@
     {% endblock content %}
 
     <!-- Footer-->
-    <footer class="py-5 bg-dark">
+    <footer class="py-5 bg-dark" style="margin-top: 400px;">
         <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2021</p></div>
     </footer>
     <!-- Bootstrap core JS-->

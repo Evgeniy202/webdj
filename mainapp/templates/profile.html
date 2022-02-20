@@ -2,8 +2,96 @@
 
 {% block content %}
 
-<div class="container">
-    <h1>Test</h1>
-</div>
+    <div class="container text-light">
+        <div class="col-8">
+        <h4>Мої замовлення:</h4>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="list-orders" role="tabpanel"
+                     aria-labelledby="list-orders-list">
+                    <table class="table text-light">
+                        <thead>
+                        <tr>
+                            <th scope="col">Номер замовлення</th>
+                            <th scope="col">Статус</th>
+                            <th scope="col">Сума</th>
+                            <th scope="col">Деталі</th>
+                        </tr>
+                        </thead>
+                        <tbody class="text-light">
+                        {% for order in customer.orders.all %}
+                            <tr>
+                                <th scope="row">{{ order.id }}</th>
+                                <td>{{ order.get_status_display }}</td>
+                                <td>{{ order.cart.final_price }} грн.</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#orderDetails-{{ order.id }}">Детальна інформація
+                                    </button>
+                                </td>
+                                <div class="modal fade" id="orderDetails-{{ order.id }}" tabindex="-1"
+                                     aria-labelledby="orderDetailsLabel-{{ order.id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl">
+                                        <div class="modal-content text-dark">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-center"
+                                                    id="orderDetailsLabel-{{ order.id }}">
+                                                    Інформація про замовлення №{{ order.id }}
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-md-3 text-center mb-2">
+                                                        <strong>Назва товару</strong>
+                                                    </div>
+                                                    <div class="col-md-3 text-center mb-2">
+                                                        <strong>Зображення</strong>
+                                                    </div>
+                                                    <div class="col-md-3 text-center mb-2">
+                                                        <strong>Кількість</strong>
+                                                    </div>
+                                                    <div class="col-md-3 text-center mb-2">
+                                                        <strong>Загальна ціна</strong>
+                                                    </div>
+                                                    <hr>
+                                                    {% for item in order.cart.products.all %}
+                                                        <div class="col-md-3 mb-3 text-center text-light">
+                                                            <strong>
+                                                                <a href="{{ item.product.get_absolute_url }}"
+                                                                   class="text-decoration-none">
+                                                                   {{ item.product.title }}
+                                                                </a>
+                                                            </strong>
+                                                        </div>
+                                                        <div class="col-md-3 mb-3 text-center">
+                                                            <img src="{{ item.product.image.url }}"
+                                                                 class="img-fluid" style="width: 50%;">
+                                                        </div>
+                                                        <div class="col-md-3 mb-3 text-center">
+                                                            {{ item.qty }} шт.
+                                                        </div>
+                                                        <div class="col-md-3 mb-3 text-center">
+                                                            {{ item.final_price }} грн.
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    Закрыть
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock content %}
