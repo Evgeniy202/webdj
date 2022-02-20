@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 {% load search_filter %}
 
-
-
 {% block content %}
     <div class="container text-light">
         {% block productfilter %}
@@ -31,7 +29,6 @@
                     </form>
                 </div>
             </div>
-
             <script>
                 let filter = document.getElementById("filter")
                 let dropBtn = document.getElementById("dropBtn")
@@ -64,19 +61,17 @@
                                     <div class="text-center">
                                         <!-- Product name-->
                                         <a href="{{ product.get_absolute_url }}">
-                                            <h6">{{ product.title }}</h6>
+                                            <h6>{{ product.title }}</h6>
                                         </a>
                                         <br>
                                         <!-- Product price-->
                                         {{ product.price }} грн
                                         <a class="btn btn-outline-dark mt-auto"
-                                           href="{% url 'add_to_cart'  slug=product.slug %}">Додати до
-                                            кошика</a>
+                                           href="{% url 'add_to_cart'  slug=product.slug %}">Додати до кошика</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     {% endfor %}
                 </div>
             </div>

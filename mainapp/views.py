@@ -19,7 +19,6 @@ from specs.models import ProductFeatures
 
 
 class MyQ(Q):
-
     default = 'OR'
 
 
@@ -32,14 +31,13 @@ class BaseView(CartMixin, View):
         context = {
             'categories': categories,
             'products': products,
-            'banners' : banner,
+            'banners': banner,
             'cart': self.cart
         }
         return render(request, 'base.html', context)
 
 
 class ProductDetailView(CartMixin, DetailView):
-
     model = Product
     context_object_name = 'product'
     template_name = 'product_detail.html'
@@ -53,7 +51,6 @@ class ProductDetailView(CartMixin, DetailView):
 
 
 class CategoryDetailView(CartMixin, DetailView):
-
     model = Category
     queryset = Category.objects.all()
     context_object_name = 'category'
@@ -194,7 +191,7 @@ class LoginView(CartMixin, View):
 
     def get(self, request, *args, **kwargs):
         form = LoginForm(request.POST or None)
-        categories =Category.objects.all()
+        categories = Category.objects.all()
         context = {
             'form': form,
             'categories': categories,
@@ -266,9 +263,19 @@ class RegistrationView(CartMixin, View):
 
 class ProfileView(CartMixin, View):
     def get(self, request, *args, **kwargs):
-        username = request.user.username
-        customer = Customer.objects.get(username=username)
-        orders = Order.objects.filter(customer=customer).order_by('-created_at')
-        categories = Category.objects.all()
-        contean = {'orders': orders, 'cart': self.cart, 'categories': categories}
-        return render(request, 'profile.html', contean)
+        customer = Customer.objects.get(user=request.user)
+        context = {
+            'customer': customer,
+            'cart': self.cart,
+        }
+        return render(request, 'profile.html', context)
+
+
+# class ProfileView(CartMixin, View):
+#     def get(self, request, *args, **kwargs):
+#         customer = Customer.objects.get(user=request.user)
+#         orders = Order.objects.filter(customer=customer).order_by('-created_at')
+#         categories = Category.objects.all()
+#         contean = {'orders': orders, 'cart': self.cart, 'categories': categories}
+#         return render(request, 'profile.html', contean)
+
