@@ -1,3 +1,4 @@
+from unicodedata import name
 from django.urls import path
 from django.contrib.auth.views import LogoutView
 
@@ -14,6 +15,7 @@ from .views import (
     LoginView,
     RegistrationView,
     ProfileView,
+    AboutView,
 )
 
 
@@ -31,4 +33,5 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page="/"), name='logout'),
     path('registration/', RegistrationView.as_view(), name='registration'),
     path('profile/', ProfileView.as_view(), name='profile'),
+    path('about/', AboutView.as_view(), name='about'),
 ]
