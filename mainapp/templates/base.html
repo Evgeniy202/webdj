@@ -13,7 +13,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.css" rel="stylesheet"/>
-    <link href="https://www.insightindia.com/mcss/icon-font.css" rel="stylesheet"/>
     <style type="text/css">
         body {
             background-color: #242424f2;
@@ -137,6 +136,7 @@
                                         <h6>{{ product.title }}</h6>
                                     </a>
                                     {{ product.price }} грн
+                                    <br>
                                     <a class="btn btn-outline-dark mt-auto"
                                        href="{% url 'add_to_cart' slug=product.slug %}">Додати до кошика</a>
                                 </div>
