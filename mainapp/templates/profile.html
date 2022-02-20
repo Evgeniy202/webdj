@@ -2,6 +2,7 @@
 
 {% block content %}
 
+<<<<<<< HEAD
     <div class="container text-light">
         <div class="col-8">
         <h4>Мої замовлення:</h4>
@@ -93,5 +94,18 @@
             </div>
         </div>
     </div>
+=======
+<div class="container text-light">
+
+
+{% for order in customer.orders.all %}
+
+    <h1>{{ order.id }}</h1>
+
+{% endfor %}
+
+
+</div>
+>>>>>>> b29d1b85a0708176be9146ea52dc2f286b93b539
 
 {% endblock content %}

@@ -267,3 +267,15 @@ class ProfileView(CartMixin, View):
         }
         return render(request, 'profile.html', context)
 
+<<<<<<< HEAD
+=======
+
+# class ProfileView(CartMixin, View):
+#     def get(self, request, *args, **kwargs):
+#         customer = Customer.objects.get(user=request.user)
+#         orders = Order.objects.filter(customer=customer).order_by('-created_at')
+#         categories = Category.objects.all()
+#         contean = {'orders': orders, 'cart': self.cart, 'categories': categories}
+#         return render(request, 'profile.html', contean)
+
+>>>>>>> b29d1b85a0708176be9146ea52dc2f286b93b539
