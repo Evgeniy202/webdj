@@ -86,3 +86,22 @@ class RegistrationForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'password', 'confirm_password', 'phone', 'email']
+
+
+# class ChangePasswordForm(forms.ModelForm):
+#
+#     oldPassword = forms.CharField(widget=forms.PasswordInput)
+#     newPassword = forms.CharField(widget=forms.PasswordInput)
+#
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.fields['password'].label = 'Старий пароль'
+#         self.fields['password'].label = 'Новий пароль'
+#         self.fields['confirm_password'].label = 'Повторіть новий пароль'
+#
+#     def clean(self):
+#         password = self.cleaned_data['password']
+#         confirm_password = self.cleaned_data['confirm_password']
+#         if password != confirm_password:
+#             raise forms.ValidationError('Паролі не співпадають')
+#         return self.cleaned_data

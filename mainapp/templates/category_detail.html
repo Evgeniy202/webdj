@@ -57,15 +57,15 @@
                                          alt="..."/>
                                 </a>
                                 <!-- Product details-->
-                                <div class="card-body p-4 row align-items-end">
+                                <div class="card-body p-4 row align-items-end text-dark">
                                     <div class="text-center">
                                         <!-- Product name-->
                                         <a href="{{ product.get_absolute_url }}">
                                             <h6>{{ product.title }}</h6>
                                         </a>
-                                        <br>
                                         <!-- Product price-->
                                         {{ product.price }} грн
+                                        <br>
                                         <a class="btn btn-outline-dark mt-auto"
                                            href="{% url 'add_to_cart'  slug=product.slug %}">Додати до кошика</a>
                                     </div>
