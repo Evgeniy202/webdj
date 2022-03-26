@@ -10,6 +10,8 @@
                 {{ form|crispy }}
                 <input type="submit" class="btn btn-success btn-block" value="Зараєструватись">
             </form>
+            <hr>
+            <p>Якщо ви вже зареєсторовані, будь-ласка <a href="{% url 'login' %}">авторизуйтесь</a></p>
         </div>
     </div>
 {% endblock %}
