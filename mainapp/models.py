@@ -28,6 +28,7 @@ class Product(models.Model):
     description = models.TextField(verbose_name='Опис', null=True)
     price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name='Ціна')
     features = models.ManyToManyField("specs.ProductFeatures", blank=True, related_name='features_for_product')
+    active = models.BooleanField(verbose_name="Товар в наявності", default=True)
     img1 = models.ImageField(verbose_name="Додаткове зображення (не обов'язково)", null=True, blank=True)
     img2 = models.ImageField(verbose_name="Додаткове зображення (не обов'язково)", null=True, blank=True)
     img3 = models.ImageField(verbose_name="Додаткове зображення (не обов'язково)", null=True, blank=True)
@@ -138,6 +139,8 @@ class Banner(models.Model):
     slug = models.SlugField(unique=True)
     link = models.CharField(max_length=255, verbose_name="Посилання (Не обов'язково)", null=True, blank=True)
     image = models.ImageField(verbose_name="Зображення")
+    first = models.BooleanField(verbose_name='Перший в слайдері', default=False)
+    active = models.BooleanField(verbose_name='Активність', default=False)
 
     def __str__(self):
         return self.title

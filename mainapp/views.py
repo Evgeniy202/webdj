@@ -36,11 +36,11 @@ class BaseView(CartMixin, View):
     def get(self, request, *args, **kwargs):
         categories = Category.objects.all()
         products = Product.objects.all()
-        banner = Banner.objects.first()
+        banners = Banner.objects.all()
         context = {
             'categories': categories,
             'products': products,
-            'banners': banner,
+            'banners': banners,
             'cart': self.cart
         }
         return render(request, 'base.html', context)

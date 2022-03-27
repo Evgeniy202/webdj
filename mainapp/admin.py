@@ -3,6 +3,8 @@ from .models import *
 
 
 class BannerAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'image', 'first', 'active')
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
@@ -10,6 +12,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ('id', 'status', 'created_at')
 
 class ProductAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'image', 'price', 'active')
     change_form_template = 'custom_admin/change_form.html'
     #exclude = ('features',)
 
