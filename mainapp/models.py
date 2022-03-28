@@ -144,3 +144,12 @@ class Banner(models.Model):
 
     def __str__(self):
         return self.title
+
+class CommentModel(models.Model):
+    product = models.ForeignKey(Product, verbose_name="Товар", on_delete=models.CASCADE)
+    name = models.CharField(max_length=255, verbose_name="Ваше ім'я")
+    generalDescription = models.CharField(max_length=255, verbose_name="Коротка оцінка товару")
+    comment = models.TextField(verbose_name="Коментар", null=False, blank=False)
+
+    def __str__(self):
+        return self.id

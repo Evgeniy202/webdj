@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
     <div class="container text-light">
         <nav aria-label="breadcrumb" class="mt-5">
@@ -12,7 +13,8 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="main-img-slider">
-                    <a data-fancybox="gallery" href="{{ product.image.url }}"><img src="{{ product.image.url }}" class="img-fluid"></a>
+                    <a data-fancybox="gallery" href="{{ product.image.url }}"><img src="{{ product.image.url }}"
+                                                                                   class="img-fluid">Детальний перегляд</a>
                 </div>
             </div>
             <div class="col-md-8">
@@ -35,6 +37,15 @@
                 </a>
             </div>
             <p>Опис: {{ product.description }}</p>
+            <hr>
+            <h4>Комантарі:</h4>
+
+            <hr>
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="submit" class="btn btn-success btn-block" value="Залишити коментар">
+            </form>
         </div>
         <div class="row">
             <section id="detail">

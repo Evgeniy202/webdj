@@ -1,8 +1,15 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from .models import Order
+from .models import Order, CommentModel
 
 User = get_user_model()
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = CommentModel
+        fields = (
+            'name', 'generalDescription', 'comment'
+        )
 
 
 class OrderForm(forms.ModelForm):
