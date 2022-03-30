@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="container text-light">
-        <div class="col-8">
+        <div class="col-12">
         <h4>Мої замовлення:</h4>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="list-orders" role="tabpanel"
@@ -10,7 +10,7 @@
                     <table class="table text-light">
                         <thead>
                         <tr>
-                            <th scope="col">Номер замовлення</th>
+                            <th scope="col">Номер</th>
                             <th scope="col">Статус</th>
                             <th scope="col">Сума</th>
                             <th scope="col">Деталі</th>
@@ -23,8 +23,8 @@
                                 <td>{{ order.get_status_display }}</td>
                                 <td>{{ order.cart.final_price }} грн.</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#orderDetails-{{ order.id }}">Детальна інформація
+                                    <button style="max-width: 100%" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#orderDetails-{{ order.id }}">Більше
                                     </button>
                                 </td>
                                 <div class="modal fade" id="orderDetails-{{ order.id }}" tabindex="-1"
@@ -51,7 +51,7 @@
                                                         <strong>Кількість</strong>
                                                     </div>
                                                     <div class="col-md-3 text-center mb-2">
-                                                        <strong>Загальна ціна</strong>
+                                                        <strong>Ціна</strong>
                                                     </div>
                                                     <hr>
                                                     {% for item in order.cart.products.all %}
@@ -77,6 +77,10 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
+                                                <div>
+                                                    <strong>Загальна ціна:</strong>
+                                                    {{ order.cart.final_price }} грн.
+                                                </div>
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                                     Звернути
                                                 </button>

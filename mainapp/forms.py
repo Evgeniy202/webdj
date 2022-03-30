@@ -1,15 +1,17 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from .models import Order, CommentModel
+from .models import Order
+
 
 User = get_user_model()
 
-class CommentForm(forms.ModelForm):
-    class Meta:
-        model = CommentModel
-        fields = (
-            'name', 'generalDescription', 'comment'
-        )
+
+# class CommentForm(forms.ModelForm):
+#     class Meta:
+#         model = CommentModel
+#         fields = (
+#             'name', 'generalDescription', 'comment'
+#         )
 
 
 class OrderForm(forms.ModelForm):
@@ -44,7 +46,7 @@ class LoginForm(forms.ModelForm):
         username = self.cleaned_data['username']
         password = self.cleaned_data['password']
         if not User.objects.filter(username=username).exists():
-            raise forms.ValidationError(f'користувач с логіном "{username} не існує!')
+            raise forms.ValidationError(f'користувач с логіном "{username}" не існує!')
         user = User.objects.filter(username=username).first()
         if user:
             if not user.check_password(password):

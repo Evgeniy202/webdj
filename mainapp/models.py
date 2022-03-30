@@ -1,5 +1,4 @@
 from email.mime import image
-from os import link
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
@@ -37,6 +36,7 @@ class Product(models.Model):
     img6 = models.ImageField(verbose_name="Додаткове зображення (не обов'язково)", null=True, blank=True)
     img7 = models.ImageField(verbose_name="Додаткове зображення (не обов'язково)", null=True, blank=True)
     img8 = models.ImageField(verbose_name="Додаткове зображення (не обов'язково)", null=True, blank=True)
+    # comment = models.ManyToManyField('CommentModel', blank=True, verbose_name='Коментарі', related_name='related_comment')
 
     def __str__(self):
         return self.title
@@ -145,11 +145,13 @@ class Banner(models.Model):
     def __str__(self):
         return self.title
 
-class CommentModel(models.Model):
-    product = models.ForeignKey(Product, verbose_name="Товар", on_delete=models.CASCADE)
-    name = models.CharField(max_length=255, verbose_name="Ваше ім'я")
-    generalDescription = models.CharField(max_length=255, verbose_name="Коротка оцінка товару")
-    comment = models.TextField(verbose_name="Коментар", null=False, blank=False)
 
-    def __str__(self):
-        return self.id
+# class CommentModel(models.Model):
+#     product = models.ForeignKey(Product, verbose_name="Товар", related_name="related_comment", on_delete=models.CASCADE)
+#     name = models.CharField(max_length=255, verbose_name="Ваше ім'я")
+#     generalDescription = models.CharField(max_length=255, verbose_name="Коротка оцінка товару")
+#     comment = models.TextField(verbose_name="Коментар", null=False, blank=False)
+#     created_at = models.DateTimeField(auto_now=True, verbose_name='Дата створення замовлення')
+#
+#     def __str__(self):
+#         return self.id

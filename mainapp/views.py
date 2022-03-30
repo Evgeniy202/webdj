@@ -10,9 +10,9 @@ from django.contrib.auth import login, authenticate
 from django.http import HttpResponseRedirect
 from django.views.generic import DetailView, View
 
-from .models import Category, Customer, Cart, CartProduct, Product, Banner, Order, CommentModel
+from .models import Category, Customer, Cart, CartProduct, Product, Banner, Order
 from .mixins import CartMixin
-from .forms import OrderForm, LoginForm, RegistrationForm, CommentForm
+from .forms import OrderForm, LoginForm, RegistrationForm
 from .utils import recalc_cart
 
 from specs.models import ProductFeatures
@@ -20,6 +20,7 @@ from specs.models import ProductFeatures
 
 class MyQ(Q):
     default = 'OR'
+
 
 class AboutView(CartMixin, View):
 
@@ -52,24 +53,24 @@ class ProductDetailView(CartMixin, DetailView):
     template_name = 'product_detail.html'
     slug_url_kwarg = 'slug'
 
+    # @transaction.atomic
+    # def post(self, request, *args, **kwargs):
+    #     form = CommentForm(request.POST or None)
+    #     product = Product.objects.get(product=request.product)
+    #     if form.is_valid():
+    #         new_comment = form.save(commit=False)
+    #         new_comment.name = form.cleaned_data['name']
+    #         new_comment.generalDescription = form.cleaned_data['generalDescription']
+    #         new_comment.comment = form.cleaned_data['comment']
+    #         new_comment.save()
+    #         product.comment.add(new_comment)
+    #         messages.add_message(request, messages.INFO, "Коментар доданий")
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = self.get_object().category.__class__.objects.all()
         context['cart'] = self.cart
         return context
-
-    @transaction.atomic
-    def post(self, request, *args, **kwargs):
-        form = CommentForm(request.POST or None)
-        if form.is_valid():
-            new_comment = form.save(commit=False)
-            new_comment.name = form.cleaned_data['name']
-            new_comment.generalDescription = form.cleaned_data['generalDescription']
-            new_comment.comment = form.cleaned_data['comment']
-            new_comment.save()
-            CommentModel.ad
-            messages.add_message(request, messages.INFO, "Коментар доданий")
-
 
 
 class CategoryDetailView(CartMixin, DetailView):

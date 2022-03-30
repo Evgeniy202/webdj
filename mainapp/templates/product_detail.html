@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 {% block content %}
     <div class="container text-light">
         <nav aria-label="breadcrumb" class="mt-5">
@@ -14,38 +13,32 @@
             <div class="col-md-4">
                 <div class="main-img-slider">
                     <a data-fancybox="gallery" href="{{ product.image.url }}"><img src="{{ product.image.url }}"
-                                                                                   class="img-fluid">Детальний перегляд</a>
+                                                                                   class="img-fluid">Переглянути більше
+                        зображень</a>
                 </div>
             </div>
             <div class="col-md-8">
                 <h3>{{ product.title }}</h3>
                 <p>Ціна: {{ product.price }} грн.</p>
-                <p class="mt-4">Характеристики:</p>
-                <table class="table">
-                    <tbody>
-                    {% for f_name, f_value in product.get_features.items %}
-                        <tr class="text-light">
-                            <th scope="row">{{ f_name }}</th>
-                            <td>{{ f_value }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                <p>Опис: {{ product.description }}</p>
                 <hr>
                 <a href="{% url 'add_to_cart' slug=product.slug %}">
                     <button class="btn btn-danger">Додати до кошику</button>
                 </a>
             </div>
-            <p>Опис: {{ product.description }}</p>
             <hr>
-            <h4>Комантарі:</h4>
-
+            <p class="mt-4"><h4>Характеристики:</h4></p>
+            <table class="table">
+                <tbody>
+                {% for f_name, f_value in product.get_features.items %}
+                    <tr class="text-light">
+                        <th scope="row">{{ f_name }}</th>
+                        <td>{{ f_value }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
             <hr>
-            <form action="" method="POST">
-                {% csrf_token %}
-                {{ form|crispy }}
-                <input type="submit" class="btn btn-success btn-block" value="Залишити коментар">
-            </form>
         </div>
         <div class="row">
             <section id="detail">
