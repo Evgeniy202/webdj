@@ -36,6 +36,7 @@ class Product(models.Model):
     img6 = models.ImageField(verbose_name="Додаткове зображення (не обов'язково)", null=True, blank=True)
     img7 = models.ImageField(verbose_name="Додаткове зображення (не обов'язково)", null=True, blank=True)
     img8 = models.ImageField(verbose_name="Додаткове зображення (не обов'язково)", null=True, blank=True)
+    mainView = models.BooleanField(verbose_name="Показувати на головній", default=True)
     # comment = models.ManyToManyField('CommentModel', blank=True, verbose_name='Коментарі', related_name='related_comment')
 
     def __str__(self):

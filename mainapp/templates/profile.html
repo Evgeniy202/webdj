@@ -3,10 +3,13 @@
 {% block content %}
     <div class="container text-light">
         <div class="col-12">
-        <h4>Мої замовлення:</h4>
+        <h4 style="margin-top: 10px;">Мої замовлення:</h4>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="list-orders" role="tabpanel"
                      aria-labelledby="list-orders-list">
+                     {% if not customer.orders.all %}
+                            <h3 style="text-align: center; margin-top: 250px;">На данний момент ви не робили замовлень</h3>
+                        {% elif customer.orders.all %}
                     <table class="table text-light">
                         <thead>
                         <tr>
@@ -92,6 +95,7 @@
                         {% endfor %}
                         </tbody>
                     </table>
+                {% endif %}
                 </div>
             </div>
         </div>
