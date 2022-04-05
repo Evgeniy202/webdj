@@ -37,7 +37,6 @@ class Product(models.Model):
     img7 = models.ImageField(verbose_name="Додаткове зображення (не обов'язково)", null=True, blank=True)
     img8 = models.ImageField(verbose_name="Додаткове зображення (не обов'язково)", null=True, blank=True)
     mainView = models.BooleanField(verbose_name="Показувати на головній", default=True)
-    # comment = models.ManyToManyField('CommentModel', blank=True, verbose_name='Коментарі', related_name='related_comment')
 
     def __str__(self):
         return self.title
@@ -147,12 +146,23 @@ class Banner(models.Model):
         return self.title
 
 
-# class CommentModel(models.Model):
-#     product = models.ForeignKey(Product, verbose_name="Товар", related_name="related_comment", on_delete=models.CASCADE)
-#     name = models.CharField(max_length=255, verbose_name="Ваше ім'я")
-#     generalDescription = models.CharField(max_length=255, verbose_name="Коротка оцінка товару")
-#     comment = models.TextField(verbose_name="Коментар", null=False, blank=False)
-#     created_at = models.DateTimeField(auto_now=True, verbose_name='Дата створення замовлення')
-#
-#     def __str__(self):
-#         return self.id
+class ChangePassword(models.Model):
+    login = models.CharField(max_length=255, verbose_name="Ваш логін")
+    email = models.EmailField(verbose_name="Ваша електронна пошта")
+    newPassword = models.CharField(max_length=255, verbose_name="Новий пароль")
+    ready = models.BooleanField(default=False, verbose_name="Статус")
+    created_at = models.DateTimeField(auto_now=True, verbose_name='Дата')
+
+    def __str__(self):
+        return str(self.id)
+
+
+class CommentModel(models.Model):
+    product = models.CharField(max_length=255, verbose_name="Товар")
+    name = models.CharField(max_length=255, verbose_name="Ваше ім'я")
+    generalDescription = models.CharField(max_length=255, verbose_name="Коротка оцінка товару")
+    comment = models.TextField(verbose_name="Коментар", null=False, blank=False)
+    created_at = models.DateTimeField(auto_now=True, verbose_name='Дата створення замовлення')
+
+    def __str__(self):
+        return str(self.id)

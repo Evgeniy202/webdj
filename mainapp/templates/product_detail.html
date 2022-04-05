@@ -1,5 +1,23 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div id="message" class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>{{ message }}</strong>
+                <script>
+                    setTimeout(function () {
+                        document.getElementById('message').style.display = 'none';
+                    }, 4000);
+                    document.getElementById('message').onclick = function () {
+                        document.getElementById('message').hidden = true;
+                    }
+                </script>
+            </div>
+            {% block productfilter %}
+            {% endblock productfilter %}
+        {% endfor %}
+    {% endif %}
     <div class="container text-light">
         <nav aria-label="breadcrumb" class="mt-5">
             <ol class="breadcrumb">
@@ -39,6 +57,29 @@
                 </tbody>
             </table>
             <hr>
+            <p class="mt-4"><h4>Коментарі:</h4></p>
+            <div class="text-light">
+                <div class="col-md-12">
+                    <h3 class=""></h3>
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <input type="submit" class="btn btn-success btn-block" value="Додати">
+                    </form>
+                </div>
+            </div>
+            {% for comment in comments %}
+                {% if comment.product == product.title %}
+                    <div class="comment mt-4 text-justify float-left">
+                        <hr style="margin-right: 60%;">
+                        <h6>{{ comment.name }} <span>- {{ comment.created_at }}</span></h6>
+                        <br>
+                        <h6>{{ comment.generalDescription }}</h6>
+                        <p>{{ comment.comment }}</p>
+                        <hr style="margin-right: 60%;">
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
         <div class="row">
             <section id="detail">

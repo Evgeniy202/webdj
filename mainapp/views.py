@@ -10,9 +10,9 @@ from django.contrib.auth import login, authenticate
 from django.http import HttpResponseRedirect
 from django.views.generic import DetailView, View
 
-from .models import Category, Customer, Cart, CartProduct, Product, Banner, Order
+from .models import Category, Customer, CartProduct, Product, Banner, CommentModel
 from .mixins import CartMixin
-from .forms import OrderForm, LoginForm, RegistrationForm
+from .forms import OrderForm, LoginForm, RegistrationForm, ChangePasswordForm, CommentForm
 from .utils import recalc_cart
 
 from specs.models import ProductFeatures
@@ -32,6 +32,7 @@ class AboutView(CartMixin, View):
         }
         return render(request, 'about.html', context)
 
+
 class BaseView(CartMixin, View):
 
     def get(self, request, *args, **kwargs):
@@ -47,30 +48,84 @@ class BaseView(CartMixin, View):
         return render(request, 'base.html', context)
 
 
+# class AddCommentView(CartMixin, View):
+#
+#     def get(self, request, *args, **kwargs):
+#         categories = Category.objects.all()
+#         form = CommentForm(request.POST or None)
+#         context = {
+#             'cart': self.cart,
+#             'categories': categories,
+#             'form': form
+#         }
+#         return render(request, 'addComment.html', context)
+#
+#     @transaction.atomic
+#     def post(self, request, *args, **kwargs):
+#         form = CommentForm(request.POST or None)
+#         if form.is_valid():
+#             new_comment = form.save(commit=False)
+#             new_comment.name = form.cleaned_data['name']
+#             new_comment.generalDescription = form.cleaned_data['generalDescription']
+#             new_comment.comment = form.cleaned_data['comment']
+#             new_comment.save()
+#             messages.add_message(request, messages.INFO, "Коментар доданий")
+
+
+class ChangePasswordView(CartMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        categories = Category.objects.all()
+        form = ChangePasswordForm(request.POST or None)
+        context = {
+            'cart': self.cart,
+            'categories': categories,
+            'form': form
+        }
+        return render(request, 'newPas.html', context)
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        form = ChangePasswordForm(request.POST or None)
+        if form.is_valid():
+            new_pas = form.save(commit=False)
+            new_pas.login = form.cleaned_data['login']
+            new_pas.email = form.cleaned_data['email']
+            new_pas.password = form.cleaned_data['newPassword']
+            new_pas.save()
+            messages.add_message(request, messages.INFO, "Заявка буде оброблена найближчим часов, менеджер з вами зв'яжиться.")
+            return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/newPas/')
+
+
 class ProductDetailView(CartMixin, DetailView):
     model = Product
     context_object_name = 'product'
     template_name = 'product_detail.html'
     slug_url_kwarg = 'slug'
 
-    # @transaction.atomic
-    # def post(self, request, *args, **kwargs):
-    #     form = CommentForm(request.POST or None)
-    #     product = Product.objects.get(product=request.product)
-    #     if form.is_valid():
-    #         new_comment = form.save(commit=False)
-    #         new_comment.name = form.cleaned_data['name']
-    #         new_comment.generalDescription = form.cleaned_data['generalDescription']
-    #         new_comment.comment = form.cleaned_data['comment']
-    #         new_comment.save()
-    #         product.comment.add(new_comment)
-    #         messages.add_message(request, messages.INFO, "Коментар доданий")
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = self.get_object().category.__class__.objects.all()
         context['cart'] = self.cart
+        context['comments'] = CommentModel.objects.all()
+        context['form'] = CommentForm
         return context
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        product_slug = kwargs.get('slug')
+        form = CommentForm(request.POST or None)
+        if form.is_valid():
+            new_comment = form.save(commit=False)
+            new_comment.product = Product.objects.get(slug=product_slug)
+            new_comment.name = form.cleaned_data['name']
+            new_comment.generalDescription = form.cleaned_data['generalDescription']
+            new_comment.comment = form.cleaned_data['comment']
+            new_comment.save()
+            messages.add_message(request, messages.INFO, "Коментар доданий")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 class CategoryDetailView(CartMixin, DetailView):
@@ -205,7 +260,8 @@ class MakeOrderView(CartMixin, View):
             new_order.cart = self.cart
             new_order.save()
             customer.orders.add(new_order)
-            messages.add_message(request, messages.INFO, "Замовлення успішно оформленно! Менерджер незабаром з вами зв'яжеться.")
+            messages.add_message(request, messages.INFO,
+                                 "Замовлення успішно оформленно! Менерджер незабаром з вами зв'яжеться.")
             return HttpResponseRedirect('/')
         return HttpResponseRedirect('/checkout/')
 
@@ -282,6 +338,7 @@ class RegistrationView(CartMixin, View):
 
 
 class ProfileView(CartMixin, View):
+
     def get(self, request, *args, **kwargs):
         customer = Customer.objects.get(user=request.user)
         categories = Category.objects.all()
