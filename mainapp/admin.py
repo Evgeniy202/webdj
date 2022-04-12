@@ -17,17 +17,21 @@ class ChangePasswordAdmin(admin.ModelAdmin):
     list_display = ('id', 'created_at', 'ready')
 
 
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'product', 'name', 'created_at')
+
+
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'category', 'title', 'image', 'price', 'active')
     change_form_template = 'custom_admin/change_form.html'
     #exclude = ('features',)
 
 
-admin.site.register(CommentModel)
 admin.site.register(Category)
 admin.site.register(CartProduct)
 admin.site.register(Cart)
 admin.site.register(Customer)
+admin.site.register(CommentModel, CommentAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Banner, BannerAdmin)
