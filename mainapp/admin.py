@@ -22,7 +22,15 @@ class CommentAdmin(admin.ModelAdmin):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'category', 'title', 'image', 'price', 'active')
+    list_display = (
+        'id',
+        'category',
+        'title',
+        'image',
+        'price',
+        'active',
+        'mainView'
+    )
     change_form_template = 'custom_admin/change_form.html'
     #exclude = ('features',)
 
