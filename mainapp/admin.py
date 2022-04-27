@@ -22,7 +22,7 @@ class CommentAdmin(admin.ModelAdmin):
 
 
 class SupportAdmin(admin.ModelAdmin):
-    list_display = ('id', 'created_at')
+    list_display = ('id', 'status', 'created_at')
 
 
 class ProductAdmin(admin.ModelAdmin):

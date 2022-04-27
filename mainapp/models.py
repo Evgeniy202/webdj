@@ -170,9 +170,27 @@ class CommentModel(models.Model):
 
 
 class Support(models.Model):
+
+    STATUS_NEW = 'new'
+    STATUS_PROSSES = 'prosses'
+    STATUS_CLOSED = 'closed'
+
+    STATUS_CHOICES = (
+        (STATUS_NEW, 'Нове'),
+        (STATUS_PROSSES, 'В процеці'),
+        (STATUS_CLOSED, 'Закрито')
+    )
+
+
     name = models.CharField(max_length=255, verbose_name='Як до вас звертатись')
     contact = models.CharField(max_length=255, verbose_name="Електронна поошта або номер телефону для зв'язку")
     description = models.TextField(verbose_name='Задайте питання або опишіть проблему')
+    status = models.CharField(
+        max_length=100,
+        verbose_name='Статус',
+        choices=STATUS_CHOICES,
+        default=STATUS_NEW
+    )
     created_at = models.DateTimeField(auto_now=True, verbose_name='Дата створення замовлення')
 
     def __str__(self):
