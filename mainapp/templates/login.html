@@ -8,8 +8,10 @@
             <form action="" method="POST">
                 {% csrf_token %}
                 {{ form|crispy }}
-                <input type="submit" class="btn btn-success btn-block" value="Уійти">
+                <input type="submit" class="btn btn-success btn-block" value="Увійти">
             </form>
+            <hr>
+            <p>Якщо ви ще не зареєсторовані, будь-ласка <a href="{% url 'registration' %}">зареєструйтесь</a></p>
         </div>
     </div>
 {% endblock %}

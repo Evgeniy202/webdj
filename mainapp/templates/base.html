@@ -44,7 +44,7 @@
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container px-4 px-lg-5">
-        <a href="/"><h3 class="title"><span>КарасикShop</span></h3></a>
+        <a href="/"><h3 class="title"><span>FishingShop</span></h3></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
                 class="navbar-toggler-icon"></span></button>
@@ -81,6 +81,9 @@
                         <a class="nav-link" href="{% url 'profile' %}">Особистий кабінет</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'support' %}">Підтримка</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Вихід</a>
                     </li>
                 {% endif %}
@@ -93,6 +96,23 @@
         </div>
     </div>
 </nav>
+{% if messages %}
+        {% for message in messages %}
+            <div id="message" class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>{{ message }}</strong>
+                <script>
+                    setTimeout(function () {
+                        document.getElementById('message').style.display = 'none';
+                    }, 4000);
+                    document.getElementById('message').onclick = function () {
+                        document.getElementById('message').hidden = true;
+                    }
+                </script>
+            </div>
+            {% block productfilter %}
+            {% endblock productfilter %}
+        {% endfor %}
+    {% endif %}
 <!-- Section-->
 {% block content %}
     <!-- Header-->
@@ -151,24 +171,6 @@
 
             </div>
         </header>
-    {% endif %}
-
-    {% if messages %}
-        {% for message in messages %}
-            <div id="message" class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>{{ message }}</strong>
-                <script>
-                    setTimeout(function () {
-                        document.getElementById('message').style.display = 'none';
-                    }, 4000);
-                    document.getElementById('message').onclick = function () {
-                        document.getElementById('message').hidden = true;
-                    }
-                </script>
-            </div>
-            {% block productfilter %}
-            {% endblock productfilter %}
-        {% endfor %}
     {% endif %}
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">

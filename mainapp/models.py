@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from django.utils import timezone
 
+
 User = get_user_model()
 
 
@@ -162,6 +163,16 @@ class CommentModel(models.Model):
     name = models.CharField(max_length=255, verbose_name="Ваше ім'я")
     generalDescription = models.CharField(max_length=255, verbose_name="Коротка оцінка товару")
     comment = models.TextField(verbose_name="Коментар", null=False, blank=False)
+    created_at = models.DateTimeField(auto_now=True, verbose_name='Дата створення замовлення')
+
+    def __str__(self):
+        return str(self.id)
+
+
+class Support(models.Model):
+    name = models.CharField(max_length=255, verbose_name='Як до вас звертатись')
+    contact = models.CharField(max_length=255, verbose_name="Електронна поошта або номер телефону для зв'язку")
+    description = models.TextField(verbose_name='Задайте питання або опишіть проблему')
     created_at = models.DateTimeField(auto_now=True, verbose_name='Дата створення замовлення')
 
     def __str__(self):

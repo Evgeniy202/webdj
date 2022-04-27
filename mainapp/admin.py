@@ -21,6 +21,10 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ('id', 'product', 'name', 'created_at')
 
 
+class SupportAdmin(admin.ModelAdmin):
+    list_display = ('id', 'created_at')
+
+
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
         'id',
@@ -44,3 +48,4 @@ admin.site.register(Order, OrderAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Banner, BannerAdmin)
 admin.site.register(ChangePassword, ChangePasswordAdmin)
+admin.site.register(Support, SupportAdmin)

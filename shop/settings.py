@@ -131,3 +131,15 @@ STATICFILES_DIRS = (
 )
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+#Email settings
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'your_username'
+EMAIL_HOST_PASSWORD = 'your_password'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+FROM_EMAIL = "testdp228@gmail.com"
+EMAIL_ADMIN = "evgenijkrotko8@gmail.com"

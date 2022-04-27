@@ -12,7 +12,7 @@ from django.views.generic import DetailView, View
 
 from .models import Category, Customer, CartProduct, Product, Banner, CommentModel
 from .mixins import CartMixin
-from .forms import OrderForm, LoginForm, RegistrationForm, ChangePasswordForm, CommentForm
+from .forms import OrderForm, LoginForm, RegistrationForm, ChangePasswordForm, CommentForm, SupportForm
 from .utils import recalc_cart
 
 from specs.models import ProductFeatures
@@ -70,6 +70,32 @@ class BaseView(CartMixin, View):
 #             new_comment.comment = form.cleaned_data['comment']
 #             new_comment.save()
 #             messages.add_message(request, messages.INFO, "Коментар доданий")
+
+
+class SupportView(CartMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        categories = Category.objects.all()
+        form = SupportForm(request.POST or None)
+        context = {
+            'cart': self.cart,
+            'categories': categories,
+            'form': form
+        }
+        return render(request, 'support.html', context)
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        form = SupportForm(request.POST or None)
+        if form.is_valid():
+            new_supp = form.save(commit=False)
+            new_supp.name = form.cleaned_data['name']
+            new_supp.contact = form.cleaned_data['contact']
+            new_supp.description = form.cleaned_data['description']
+            new_supp.save()
+            messages.add_message(request, messages.INFO, "Заявка буде оброблена найближчим часов, адміністратор з вами зв'яжиться.")
+            return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/support/')
 
 
 class ChangePasswordView(CartMixin, View):

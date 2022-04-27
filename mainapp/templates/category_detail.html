@@ -4,7 +4,6 @@
 {% block content %}
     <div class="container text-light">
         {% block productfilter %}
-
             <form class="d-flex mt-3" action="{% url 'category_detail' slug=category.slug %}" method="GET">
                 <input class="form-control me-2" name="search" type="search" placeholder="Поиск товара"
                        aria-label="Search">
